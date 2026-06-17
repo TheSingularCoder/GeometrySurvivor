@@ -1,5 +1,5 @@
 #include "Components/ArcherAIComponent.h"
-#include "Components/EnemySpellComponent.h"
+#include "Components/SpellComponent.h"
 #include "Components/TransformComponent.h"
 
 ArcherAIComponent::ArcherAIComponent(infoAI &info) : SimpleAIComponent(info) {}
@@ -29,6 +29,6 @@ void ArcherAIComponent::update(float dt) {
         tc->setVel(Vector2D{0, 0});
     }
     if (20.0f < dist && dist < 150.0f) {
-        this->entity->getComponent<EnemySpellComponent>()->castSpell(EnemySpell::Primary, dir);
+        this->entity->getComponent<SpellComponent>()->castSpell(Spell::Primary, dir);
     }
 }

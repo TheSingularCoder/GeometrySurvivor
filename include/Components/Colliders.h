@@ -16,9 +16,11 @@ class SpellCollider : public ColliderComponent {
 };
 
 class BulletCollider : public ColliderComponent {
+    int damage;
+    std::function<void(Entity *e)> bulletBehaviour;
 
   public:
-    BulletCollider(float radius, CollisionLayer::Type layer, CollisionLayer::Type mask);
+    BulletCollider(float radius, CollisionLayer::Type layer, CollisionLayer::Type mask, std::function<void(Entity *e)> bulletBehaviour);
     void onCollision(Entity *e) override;
 };
 

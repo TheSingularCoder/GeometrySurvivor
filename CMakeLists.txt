@@ -39,11 +39,15 @@ set(LIB_HEADERS
         include/Components/SpellComponent.h
         include/Components/Colliders.h
         include/Components/ArcherAIComponent.h
-        include/Components/EnemySpellComponent.h
         include/Components/SquareAIComponent.h
         include/Components/ScaleComponent.h
         include/Components/MageAIComponent.h
         include/Components/SummonerAIComponent.h
+        include/GameData.h
+        include/ShopState.h
+        include/SpellStats.h
+        include/SpellRegistry.h
+
 )
 
 set(LIB_SRC
@@ -69,11 +73,11 @@ set(LIB_SRC
         src/Components/SpellComponent.cpp
         src/Components/Colliders.cpp
         src/Components/ArcherAIComponent.cpp
-        src/Components/EnemySpellComponent.cpp
         src/Components/SquareAIComponent.cpp
         src/Components/ScaleComponent.cpp
         src/Components/MageAIComponent.cpp
         src/Components/SummonerAIComponent.cpp
+        src/ShopState.cpp
 )
 
 include(FetchContent)

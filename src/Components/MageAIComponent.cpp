@@ -1,5 +1,5 @@
 #include "Components/MageAIComponent.h"
-#include "Components/EnemySpellComponent.h"
+#include "Components/SpellComponent.h"
 #include "Entity.h"
 #include "RandomUtils.h"
 #include "Vector2D.h"
@@ -32,6 +32,6 @@ void MageAIComponent::update(float dt) {
         tc->setVel(Vector2D{0, 0});
     }
     if (20.0f < dist && dist < 200.0f) {
-        this->entity->getComponent<EnemySpellComponent>()->castSpell(EnemySpell::Primary, targetPos + offset);
+        this->entity->getComponent<SpellComponent>()->castSpell(Spell::Primary, targetPos + offset);
     }
 }

@@ -66,9 +66,9 @@ void Factory::makePentagon() {
     e.addComponent<EnemyCollider>(rad, CollisionLayer::Enemy, CollisionLayer::Player);
     e.addComponent<HealthComponent>(rad * 10, 0.0f); // no inviTime for the enemies
     e.addComponent<ArcherAIComponent>(AIcontext);
-    e.addComponent<EnemySpellComponent>().addSpell(EnemySpell::Primary, std::make_unique<BulletSpell>(0.35f, [this](Vector2D initpos, Vector2D dir) {
-                                                       this->makeBullet(initpos, dir, CollisionLayer::Player);
-                                                   }));
+    e.addComponent<SpellComponent>().addSpell(Spell::Primary, std::make_unique<BulletSpell>(0.35f, 1, [this](Vector2D initpos, Vector2D dir, int damage) {
+                                                  this->makeBullet(initpos, dir, damage, CollisionLayer::Player);
+                                              }));
     e.init();
 }
 
@@ -79,10 +79,10 @@ void Factory::makeMiniBomber(Vector2D pos) {
     int rad = 4; // radius of the enemy
     auto color = SDL::Colors::SunFlower;
     e.addComponent<SimpleSpriteComponent>(rad, 3, color);
-    e.addComponent<EnemyCollider>(rad, CollisionLayer::Enemy, CollisionLayer::None);
-    e.addComponent<HealthComponent>(10.0f, 0.0f); // no inviTime for the enemies
+    e.addComponent<EnemyCollider>(rad, CollisionLayer::Enemy, CollisionLayer::None); // it has no collision damage
+    e.addComponent<HealthComponent>(10.0f, 0.0f);                                    // no inviTime for the enemies
     e.addComponent<SimpleAIComponent>(AIcontext);
-    e.addComponent<LifeTimeComponent>(2.5f, [this](Vector2D pos) { this->makeExplosion(pos, 6, CollisionLayer::Player); });
+    e.addComponent<LifeTimeComponent>(2.5f, [this](Vector2D pos) { this->makeExplosion(pos, 6, 10, CollisionLayer::Player); });
     e.init();
 }
 
@@ -96,8 +96,8 @@ void Factory::makeHexagon() {
     e.addComponent<EnemyCollider>(rad, CollisionLayer::Enemy, CollisionLayer::Player);
     e.addComponent<HealthComponent>(rad * 7, 0.0f); // no inviTime for the enemies
     e.addComponent<SummonerAIComponent>(AIcontext);
-    e.addComponent<EnemySpellComponent>().addSpell(EnemySpell::Primary,
-                                                   std::make_unique<CallbackSpell>(3.0f, [this](Vector2D initpos) { this->makeMiniBomber(initpos); }));
+    e.addComponent<SpellComponent>().addSpell(
+        Spell::Primary, std::make_unique<CallbackSpell>(3.0f, 1, [this](Vector2D initpos, int damage) { this->makeMiniBomber(initpos); }));
     e.init();
 }
 
@@ -111,7 +111,7 @@ void Factory::makeHeptagon() {
     e.addComponent<EnemyCollider>(rad, CollisionLayer::Enemy, CollisionLayer::Player);
     e.addComponent<HealthComponent>(rad * 3, 0.0f); // no inviTime for the enemies
     e.addComponent<MageAIComponent>(AIcontext);
-    e.addComponent<EnemySpellComponent>().addSpell(
-        EnemySpell::Primary, std::make_unique<CallbackSpell>(3.0f, [this](Vector2D pos) { this->makeInferno(pos, CollisionLayer::Player); }));
+    e.addComponent<SpellComponent>().addSpell(
+        Spell::Primary, std::make_unique<CallbackSpell>(3.0f, 1, [this](Vector2D pos, int damage) { this->makeInferno(pos, damage, CollisionLayer::Player); }));
     e.init();
 }

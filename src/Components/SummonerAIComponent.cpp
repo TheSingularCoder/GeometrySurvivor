@@ -1,6 +1,6 @@
 #include "Components/SummonerAIComponent.h"
-#include "Components/EnemySpellComponent.h"
 #include "Components/SimpleAIComponent.h"
+#include "Components/SpellComponent.h"
 #include "Components/TransformComponent.h"
 
 SummonerAIComponent::SummonerAIComponent(infoAI &info) : SimpleAIComponent(info) {}
@@ -29,6 +29,6 @@ void SummonerAIComponent::update(float dt) {
         tc->setVel(Vector2D{0, 0});
     }
     if (20.0f < dist && dist < 150.0f) {
-        this->entity->getComponent<EnemySpellComponent>()->castSpell(EnemySpell::Primary, thisPos);
+        this->entity->getComponent<SpellComponent>()->castSpell(Spell::Primary, thisPos);
     }
 }

@@ -18,11 +18,11 @@ class PlayingState : public State {
     infoAI aiContext;
     Entity *player = nullptr; // reference to the player
 
-    Timer waveTimer = {30.0f};
-    int wave = 0;
+    Timer waveTimer = {15.0f};
+    Timer shopTimer = {30.0f};
 
   public:
-    PlayingState(std::function<void(StateID)> chaState);
+    PlayingState(std::function<void(StateID)> chaState, GameData &gdata);
     ~PlayingState();
     void handleEvent(const SDL::Event &e) override;
     void update(float dt) override;

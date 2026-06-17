@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Components/HealthComponent.h"
 #include "Components/TransformComponent.h"
 #include "Entity.h"
 #include "Timer.h"
@@ -9,25 +8,33 @@ class ISpell {
 
   protected:
     Timer cooldown; // we have to reset each time we call
+    int damage = 0;
+
   public:
-    ISpell(float cooldown) : cooldown(cooldown) {}
+    ISpell(float cooldown, int damage) : cooldown(cooldown), damage(damage) {}
     virtual ~ISpell() = default;
     virtual void cast(Entity &e, Vector2D dir) = 0;
     virtual void update(Entity &e, float dt) { cooldown.update(dt); };
     virtual void render(Entity &e, SDL::RendererPtr r) {}
+    void upgrade(float newCooldown, int newDamage) {
+        damage = newDamage;
+        cooldown = Timer{newCooldown};
+        cooldown.reset();
+    }
 };
 
 class BulletSpell : public ISpell {
 
   private:
-    std::function<void(Vector2D initPos, Vector2D dir)> castBullet;
+    std::function<void(Vector2D initPos, Vector2D dir, int damage)> castBullet;
 
   public:
-    BulletSpell(float rechargeTime, std::function<void(Vector2D initPos, Vector2D dir)> func) : ISpell(rechargeTime), castBullet(func) {}
+    BulletSpell(float rechargeTime, int damage, std::function<void(Vector2D initPos, Vector2D dir, int damage)> func)
+        : ISpell(rechargeTime, damage), castBullet(func) {}
     void cast(Entity &e, Vector2D dir) override {
         if (cooldown.isReady()) {
             if (castBullet)
-                castBullet(e.getComponent<TransformComponent>()->getPos(), dir);
+                castBullet(e.getComponent<TransformComponent>()->getPos(), dir, damage);
             cooldown.reset();
         }
     }
@@ -41,7 +48,7 @@ class DashSpell : public ISpell {
     float prevSpeed = 0.0f;
 
   public:
-    DashSpell() : ISpell(1.0f) {}
+    DashSpell(float rechargeTime) : ISpell(rechargeTime, 0.0f) {}
     void cast(Entity &e, Vector2D dir) override {
         if (cooldown.isReady()) {
             auto *tc = e.getComponent<TransformComponent>();
@@ -73,15 +80,15 @@ class DashSpell : public ISpell {
 class CallbackSpell : public ISpell { // spell for which we only call a lambda
 
   private:
-    std::function<void(Vector2D pos)> callback;
+    std::function<void(Vector2D pos, int damage)> callback;
 
   public:
-    CallbackSpell(float rechargeTime, std::function<void(Vector2D pos)> c) : ISpell(rechargeTime), callback(c) {}
+    CallbackSpell(float rechargeTime, int damage, std::function<void(Vector2D pos, int damage)> c) : ISpell(rechargeTime, damage), callback(c) {}
     void cast(Entity &e, Vector2D dir) override {
         if (cooldown.isReady()) {
 
             if (callback) {
-                callback(dir);
+                callback(dir, damage);
             }
             cooldown.reset();
         }

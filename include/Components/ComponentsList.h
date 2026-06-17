@@ -3,7 +3,7 @@
 #include "Components/Colliders.h"
 #include "Components/Component.h"
 #include "Components/ControllerComponent.h"
-#include "Components/EnemySpellComponent.h"
+
 #include "Components/HealthComponent.h"
 #include "Components/LifeTimeComponent.h"
 #include "Components/MageAIComponent.h"
