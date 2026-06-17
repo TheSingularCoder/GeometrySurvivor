@@ -1,10 +1,11 @@
 #include "PlayingState.h"
 #include "Components/ComponentsList.h"
+#include "GameData.h"
 #include "RandomUtils.h"
-#include "SDL_keycode.h"
 #include "SDL_scancode.h"
 
-PlayingState::PlayingState(std::function<void(StateID)> chaState) : State(chaState), cManager(eManager.getUpdateVec()), fact(eManager, aiContext) {
+PlayingState::PlayingState(std::function<void(StateID)> chaState, GameData &gData)
+    : State(chaState, gData), cManager(eManager.getUpdateVec()), fact(eManager, aiContext, gData) {
 
     fact.makePlayer([this](Entity &e) { setAsPlayer(e); }, [this]() { setPlayerNull(); }, keyPressedVec);
 
@@ -33,7 +34,10 @@ void PlayingState::update(float dt) {
     if (waveTimer.isReady()) {
         startWave();
     }
-
+    shopTimer.update(dt);
+    if (shopTimer.isReady()) {
+        changeState(StateID::Shop);
+    }
     eManager.flushBuffer();
     // update AIcontext
     aiContext.isPlayerAlive = static_cast<bool>(getPlayer());
@@ -50,9 +54,10 @@ void PlayingState::render(SDL::RendererPtr r) {
 }
 
 void PlayingState::startWave() {
+    gameData.wave++;
     waveTimer.reset();
 
-    int wavePoints = 10 + wave * 15;
+    int wavePoints = 10 + gameData.wave * 5;
     while (wavePoints >= 3) {
 
         switch (randomInt(3, 7)) {
@@ -78,6 +83,4 @@ void PlayingState::startWave() {
             break;
         }
     }
-
-    wave += 1;
 }

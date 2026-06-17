@@ -33,53 +33,29 @@ void ControllerComponent::update(float dt) {
         case SDL_SCANCODE_Z:
 
             if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::Bullet, dir);
+                spell->castSpell(Spell::Primary, dir);
             }
 
             break;
         case SDL_SCANCODE_X:
 
             if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::Dash, dir);
+                spell->castSpell(Spell::Secondary, dir);
             }
 
             break;
 
         case SDL_SCANCODE_C:
             if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::Blast, playerPos);
+                spell->castSpell(Spell::Special, playerPos);
             }
             break;
         case SDL_SCANCODE_V:
             if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::IceAura, playerPos);
+                spell->castSpell(Spell::Special2, playerPos);
             }
             break;
-        case SDL_SCANCODE_B:
-            if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::FireAura, playerPos);
-            }
-            break;
-        case SDL_SCANCODE_N:
-            if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::ThunderAura, playerPos);
-            }
-            break;
-        case SDL_SCANCODE_A:
-            if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::PiercingBullet, dir);
-            }
-            break;
-        case SDL_SCANCODE_S:
-            if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::ShotgunBullet, dir);
-            }
-            break;
-        case SDL_SCANCODE_D:
-            if (auto *spell = this->entity->getComponent<SpellComponent>()) { // we create a variable so we dont check twice
-                spell->castSpell(Spell::SpreadBullet, dir);
-            }
-            break;
+
         default:
             break;
         }
